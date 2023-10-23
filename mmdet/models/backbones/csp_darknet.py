@@ -9,6 +9,7 @@ from torch.nn.modules.batchnorm import _BatchNorm
 
 from mmdet.registry import MODELS
 from ..layers import CSPLayer
+from collections import OrderedDict
 
 
 class Focus(nn.Module):
@@ -276,11 +277,20 @@ class CSPDarknet(BaseModule):
                 if isinstance(m, _BatchNorm):
                     m.eval()
 
+    # def forward(self, x):
+    #     outs = []
+    #     for i, layer_name in enumerate(self.layers):
+    #         layer = getattr(self, layer_name)
+    #         x = layer(x)
+    #         if i in self.out_indices:
+    #             outs.append(x)
+    #     return tuple(outs)
     def forward(self, x):
-        outs = []
+        outs = OrderedDict()
+        #一次遍历模型的所有子模块，并进行正向传播
         for i, layer_name in enumerate(self.layers):
             layer = getattr(self, layer_name)
             x = layer(x)
             if i in self.out_indices:
-                outs.append(x)
-        return tuple(outs)
+                outs[layer_name] = x
+        return outs

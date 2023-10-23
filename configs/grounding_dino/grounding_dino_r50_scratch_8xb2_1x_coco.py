@@ -1,5 +1,5 @@
 _base_ = [
-    '../_base_/datasets/coco_detection.py',
+    '../_base_/datasets/coco.py',
     '../_base_/schedules/schedule_1x.py', '../_base_/default_runtime.py'
 ]
 lang_model_name = 'bert-base-uncased'
@@ -81,7 +81,7 @@ model = dict(
         num_feats=128, normalize=True, offset=0.0, temperature=20),
     bbox_head=dict(
         type='GroundingDINOHead',
-        num_classes=80,
+        num_classes=20,
         sync_cls_avg_factor=True,
         contrastive_cfg=dict(max_text_len=256, log_scale='auto', bias=True),
         loss_cls=dict(
@@ -162,6 +162,8 @@ test_pipeline = [
 ]
 
 train_dataloader = dict(
+    batch_size=2,
+    num_workers=2,
     dataset=dict(
         filter_cfg=dict(filter_empty_gt=False),
         pipeline=train_pipeline,
@@ -185,7 +187,7 @@ optim_wrapper = dict(
         'backbone': dict(lr_mult=0.1)
     }))
 # learning policy
-max_epochs = 12
+max_epochs = 24
 train_cfg = dict(
     type='EpochBasedTrainLoop', max_epochs=max_epochs, val_interval=1)
 
@@ -205,4 +207,4 @@ param_scheduler = [
 # NOTE: `auto_scale_lr` is for automatically scaling LR,
 # USER SHOULD NOT CHANGE ITS VALUES.
 # base_batch_size = (8 GPUs) x (2 samples per GPU)
-auto_scale_lr = dict(base_batch_size=16)
+auto_scale_lr = dict(base_batch_size=2)
