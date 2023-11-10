@@ -14,6 +14,13 @@ ForwardResults = Union[Dict[str, torch.Tensor], List[DetDataSample],
                        Tuple[torch.Tensor], torch.Tensor]
 
 
+@torch.fx.wrap
+def loop(data_samples, results_list):
+    for data_sample, pred_instances in zip(data_samples, results_list):
+        data_sample.pred_instances = pred_instances
+    samplelist_boxtype2tensor(data_samples)
+    return data_samples
+
 class BaseDetector(BaseModel, metaclass=ABCMeta):
     """Base class for detectors.
 
@@ -149,8 +156,9 @@ class BaseDetector(BaseModel, metaclass=ABCMeta):
                     (num_instances, ).
                 - bboxes (Tensor): Has a shape (num_instances, 4),
                     the last dimension 4 arrange as (x1, y1, x2, y2).
-        """
-        for data_sample, pred_instances in zip(data_samples, results_list):
-            data_sample.pred_instances = pred_instances
-        samplelist_boxtype2tensor(data_samples)
-        return data_samples
+        """ 
+        return loop(data_samples, results_list)
+        # for data_sample, pred_instances in zip(data_samples, results_list):
+        #     data_sample.pred_instances = pred_instances
+        # samplelist_boxtype2tensor(data_samples)
+        # return data_samples

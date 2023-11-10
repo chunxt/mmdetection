@@ -1,14 +1,13 @@
 _base_ = [
     '/home/ry/DLtcx/exp_master/mmdetection/configs/_base_/datasets/coco_detection.py',
-    '/home/ry/DLtcx/exp_master/mmdetection/configs/_base_/schedules/schedule_1x.py',
+    '/home/ry/DLtcx/exp_master/mmdetection/configs/_base_/schedules/schedule_1x.py', 
     '/home/ry/DLtcx/exp_master/mmdetection/configs/_base_/default_runtime.py'
 ]
-data_root = '/home/ry/DLry/mmdetection-dev-3.1/datasets/'
-
-
-# model settings
+checkpoint = 'https://download.openmmlab.com/mmclassification/v0/efficientnet/efficientnet-b3_3rdparty_8xb32-aa_in1k_20220119-5b4887a0.pth'  # noqa
+norm_cfg = dict(type='BN', requires_grad=True)
+load_from='/home/ry/DLtcx/checkpoint/ddod_r50_fpn_1x_coco_20220523_223737-29b2fc67.pth'
 model = dict(
-    type='ATSS',
+    type='DDOD',
     data_preprocessor=dict(
         type='DetDataPreprocessor',
         mean=[123.675, 116.28, 103.53],
@@ -16,24 +15,28 @@ model = dict(
         bgr_to_rgb=True,
         pad_size_divisor=32),
     backbone=dict(
-        type='ResNet',
-        depth=50,
-        num_stages=4,
-        out_indices=(0, 1, 2, 3),
-        frozen_stages=1,
-        norm_cfg=dict(type='BN', requires_grad=True),
-        norm_eval=True,
-        style='pytorch',
-        init_cfg=dict(type='Pretrained', checkpoint='torchvision://resnet50')),
+        type='EfficientNet',
+        arch='b3',
+        drop_path_rate=0.2,
+        out_indices=(3, 4, 5),
+        frozen_stages=0,
+        norm_cfg=dict(
+            type='SyncBN', requires_grad=True, eps=1e-3, momentum=0.01),
+        norm_eval=False,
+        init_cfg=dict(
+            type='Pretrained', prefix='backbone', checkpoint=checkpoint)),
     neck=dict(
         type='FPN',
-        in_channels=[256, 512, 1024, 2048],
+        in_channels=[48, 136, 384],
         out_channels=256,
-        start_level=1,
-        add_extra_convs='on_output',
-        num_outs=5),
+        start_level=0,
+        add_extra_convs='on_input',
+        num_outs=5,
+        relu_before_extra_convs=True,
+        no_norm_on_lateral=True,
+        norm_cfg=norm_cfg),
     bbox_head=dict(
-        type='ATSSHead',
+        type='DDODHead',
         num_classes=10,
         in_channels=256,
         stacked_convs=4,
@@ -43,7 +46,7 @@ model = dict(
             ratios=[1.0],
             octave_base_scale=8,
             scales_per_octave=1,
-            strides=[8, 16, 32, 64, 128]),
+            strides=[8, 16, 32, 64]),
         bbox_coder=dict(
             type='DeltaXYWHBBoxCoder',
             target_means=[.0, .0, .0, .0],
@@ -55,11 +58,12 @@ model = dict(
             alpha=0.25,
             loss_weight=1.0),
         loss_bbox=dict(type='GIoULoss', loss_weight=2.0),
-        loss_centerness=dict(
+        loss_iou=dict(
             type='CrossEntropyLoss', use_sigmoid=True, loss_weight=1.0)),
-    # training and testing settings
     train_cfg=dict(
-        assigner=dict(type='ATSSAssigner', topk=9),
+        # assigner is mean cls_assigner
+        assigner=dict(type='ATSSAssigner', topk=9, alpha=0.8),
+        reg_assigner=dict(type='ATSSAssigner', topk=9, alpha=0.5),
         allowed_border=-1,
         pos_weight=-1,
         debug=False),
@@ -69,6 +73,7 @@ model = dict(
         score_thr=0.05,
         nms=dict(type='nms', iou_threshold=0.6),
         max_per_img=100))
+
 # optimizer
 optim_wrapper = dict(
     optimizer=dict(type='SGD', lr=0.01, momentum=0.9, weight_decay=0.0001))

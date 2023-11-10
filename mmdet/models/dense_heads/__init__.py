@@ -53,6 +53,9 @@ from .yolo_head import YOLOV3Head
 from .yolof_head import YOLOFHead
 from .yolox_head import YOLOXHead
 from .atss_head_hw import ATSSHeadHW
+from .ATSSHead_Uni import ATSSHead_Uni
+from .THeadUni import TOODHeadUni
+from .ddod_head_hwb import DDODHeadHW
 
 __all__ = [
     'AnchorFreeHead', 'AnchorHead', 'GuidedAnchorHead', 'FeatureAdaption',
@@ -69,5 +72,7 @@ __all__ = [
     'CenterNetUpdateHead', 'RTMDetHead', 'RTMDetSepBNHead', 'CondInstBboxHead',
     'CondInstMaskHead', 'RTMDetInsHead', 'RTMDetInsSepBNHead',
     'BoxInstBboxHead', 'BoxInstMaskHead', 'ConditionalDETRHead', 'DINOHead',
-    'ATSSVLFusionHead', 'DABDETRHead', 'DDQDETRHead', 'GroundingDINOHead', 'ATSSHeadHW'
+    'ATSSVLFusionHead', 'DABDETRHead', 'DDQDETRHead', 'GroundingDINOHead',
+    'ATSSHeadHW','DDODHeadHW'
+    , 'ATSSHead_Uni', 'TOODHeadUni'
 ]

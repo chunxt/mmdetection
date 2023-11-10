@@ -466,8 +466,8 @@ class ATSSHead(AnchorHead):
             num_level_anchors, inside_flags)
         pred_instances = InstanceData(priors=anchors)
         assign_result = self.assigner.assign(pred_instances,
-                                             num_level_anchors_inside,
-                                             gt_instances, gt_instances_ignore)
+                                            num_level_anchors_inside,
+                                            gt_instances, gt_instances_ignore)
 
         sampling_result = self.sampler.sample(assign_result, pred_instances,
                                               gt_instances)

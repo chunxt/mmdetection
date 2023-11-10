@@ -293,10 +293,10 @@ class ACFPN(nn.Module):
 
         # 将dense送入cxam模块和cnam模块，不想使用AM模块注释下面三行即可
         # cxam = self.CxAM(dense)
-        # cxam = self.cc(dense)
-        # cnam = self.ccf(dense,last_inner)
+        cxam = self.cc(dense)
+        cnam = self.ccf(dense,last_inner)
         # cnam = self.CnAM(dense, last_inner)
-        # result = cxam + cnam
+        result = cxam + cnam
 
         # result中保存着每个预测特征层
         results = []
@@ -304,10 +304,10 @@ class ACFPN(nn.Module):
         # results.append(self.layer_blocks[-1](last_inner))
 
         # 不使用AM模块
-        P5 = dense + self.get_result_from_layer_blocks(last_inner, -1)
+        # P5 = dense + self.get_result_from_layer_blocks(last_inner, -1)
 
         # 使用AM模块
-        # P5 = result + self.get_result_from_layer_blocks(last_inner, -1)
+        P5 = result + self.get_result_from_layer_blocks(last_inner, -1)
 
         results.append(P5)
 

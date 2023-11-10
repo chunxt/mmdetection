@@ -1,4 +1,4 @@
-_base_ = '../common/lsj-200e_coco-detection.py'
+_base_ = '/home/ry/DLtcx/exp_master/mmdetection/configs/common/lsj-200e_coco-detection.py'
 
 image_size = (1024, 1024)
 batch_augments = [dict(type='BatchFixedSizePad', size=image_size)]
@@ -33,7 +33,7 @@ model = dict(
         relu_before_extra_convs=True),
     bbox_head=dict(
         type='CenterNetUpdateHead',
-        num_classes=80,
+        num_classes=10,
         in_channels=256,
         stacked_convs=4,
         feat_channels=256,
@@ -58,7 +58,7 @@ train_dataloader = dict(batch_size=8, num_workers=4)
 optim_wrapper = dict(
     type='AmpOptimWrapper',
     optimizer=dict(
-        type='SGD', lr=0.01 * 4, momentum=0.9, weight_decay=0.00004),
+        type='SGD', lr=0.01, momentum=0.9, weight_decay=0.00004),
     paramwise_cfg=dict(norm_decay_mult=0.))
 
 param_scheduler = [

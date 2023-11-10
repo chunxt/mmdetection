@@ -18,11 +18,11 @@ from mmdet.utils import replace_cfg_vals, update_data_root
 def parse_args():
     parser = argparse.ArgumentParser(
         description='Generate confusion matrix from detection results')
-    parser.add_argument('--config',default='/home/ry/DLtcx/exp_master/mmdetection/work_dirs/tood_csp_fpn_1x_coco_46.1/tood_csp_fpn_1x_coco.py', help='test config file path')
+    parser.add_argument('--config',default='/home/ry/DLtcx/exp_master/mmdetection/work_dirs/tood_csp_acfpncc_1x_coco_47.9/tood_csp_acfpncc_1x_coco.py', help='test config file path')
     parser.add_argument(
-        '--prediction_path', default='/home/ry/DLtcx/exp_master/mmdetection/work_dirs/tood_csp_fpn_1x_coco_46.1/toodcsp461.pkl', help='prediction path where test .pkl result')
+        '--prediction_path', default='/home/ry/DLtcx/exp_master/mmdetection/work_dirs/tood_csp_acfpncc_1x_coco_47.9/tood479.pkl', help='prediction path where test .pkl result')
     parser.add_argument(
-        '--save_dir', default='outmartix', help='directory where confusion matrix will be saved')
+        '--save_dir', default='outmartix479', help='directory where confusion matrix will be saved')
     parser.add_argument(
         '--show', action='store_true', help='show confusion matrix')
     parser.add_argument(

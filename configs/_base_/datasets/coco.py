@@ -1,6 +1,8 @@
 # dataset settings
 dataset_type = 'CocoDataset'
-data_root = '/home/ry/DLry/mmrotate/data/DIOR/'
+# data_root = '/home/ry/DLry/mmrotate/data/DIOR/'
+data_root = '/home/ry/DLry/mmdetection-dev-3.1/datasets/'
+
 
 # Example to use different file client
 # Method 1: simply set the data root and let the file I/O module
@@ -43,8 +45,8 @@ train_dataloader = dict(
     dataset=dict(
         type=dataset_type,
         data_root=data_root,
-        ann_file='Annotations/DIOR_trainval.json',
-        data_prefix=dict(img='JPEGImages-trainval/'),
+        ann_file='annotations/train.json',
+        data_prefix=dict(img='VisDrone2019-DET/VisDrone2019-DET-train/'),
         filter_cfg=dict(filter_empty_gt=True, min_size=32),
         pipeline=train_pipeline,
         backend_args=backend_args))
@@ -57,8 +59,8 @@ val_dataloader = dict(
     dataset=dict(
         type=dataset_type,
         data_root=data_root,
-        ann_file='Annotations/DIOR_test.json',
-        data_prefix=dict(img='JPEGImages-test/'),
+        ann_file='annotations/val.json',
+        data_prefix=dict(img='VisDrone2019-DET/VisDrone2019-DET-val/'),
         test_mode=True,
         pipeline=test_pipeline,
         backend_args=backend_args))
@@ -66,7 +68,7 @@ test_dataloader = val_dataloader
 
 val_evaluator = dict(
     type='CocoMetric',
-    ann_file=data_root + 'Annotations/DIOR_test.json',
+    ann_file=data_root + 'annotations/val.json',
     metric='bbox',
     format_only=False,
     backend_args=backend_args)

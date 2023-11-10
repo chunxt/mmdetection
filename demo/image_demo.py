@@ -42,26 +42,26 @@ from mmengine.logging import print_log
 
 from mmdet.apis import DetInferencer
 
-
+#/home/ry/DLtcx/exp_master/mmdetection/demo/0000001_08414_d_0000013.jpg
 def parse_args():
     parser = ArgumentParser()
     parser.add_argument(
-        '--inputs',default='/home/ry/DLtcx/exp_master/mmdetection/demo/0000001_08414_d_0000013.jpg', type=str, help='Input image file or folder path.')
+        '--inputs',default='/home/ry/DLtcx/exp_master/mmdetection/demo/0000330_04201_d_0000821.jpg', type=str, help='Input image file or folder path.')
     parser.add_argument(
         '--model',
         type=str,
-        default='/home/ry/DLtcx/exp_master/mmdetection/work_dirs/tood_r50_fpn_1x_coco_42.3/tood_r50_fpn_1x_coco.py',
+        default='/home/ry/DLtcx/exp_master/mmdetection/work_dirs/atss_sw_fpn_1x_coco_hwb_40.9/atss_sw_fpn_1x_coco_hwb.py',
         help='Config or checkpoint .pth file or the model name '
         'and alias defined in metafile. The model configuration '
         'file will try to read from .pth if the parameter is '
         'a .pth weights file.')
-    parser.add_argument('--weights', default='/home/ry/DLtcx/exp_master/mmdetection/work_dirs/tood_r50_fpn_1x_coco_42.3/epoch_12.pth', help='Checkpoint file')
+    parser.add_argument('--weights', default='/home/ry/DLtcx/exp_master/mmdetection/work_dirs/atss_sw_fpn_1x_coco_hwb_40.9/epoch_12.pth', help='Checkpoint file')
     parser.add_argument(
         '--out-dir',
         type=str,
-        default='outputs',
+        default='outputs_sdw',
         help='Output directory of images or prediction results.')
-    parser.add_argument('--texts', help='text prompt')
+    parser.add_argument('--texts', default='motor', help='text prompt')
     parser.add_argument(
         '--device', default='cuda:0', help='Device used for inference')
     parser.add_argument(
